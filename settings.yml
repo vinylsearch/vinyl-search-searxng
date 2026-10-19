@@ -5,12 +5,29 @@ search:
     - html
     - json
 
-# Give ordinary upstream responses time to finish. Provider suspensions and
-# Retry-After remain enabled; no proxies or automatic retries on blocks.
+# Bounded upstream requests; provider suspensions and Retry-After stay enabled.
+# No retries on blocks, proxy rotation, or paid search API credentials.
 outgoing:
   request_timeout: 6.0
   max_request_timeout: 10.0
 
+# Verified from this Render service on 19 October 2026:
+# Yep returns relevant album/product results. The previous default web engines
+# are currently rate-limited or time out. Keep them available for explicit
+# diagnostics, but do not include them in every production query.
 engines:
-  - name: duckduckgo
+  - name: yep
+    disabled: false
+    categories: [general, web]
     timeout: 6.0
+  - name: duckduckgo
+    disabled: true
+    timeout: 6.0
+  - name: google cse
+    disabled: true
+  - name: brave
+    disabled: true
+  - name: wikipedia
+    disabled: true
+  - name: wikidata
+    disabled: true
