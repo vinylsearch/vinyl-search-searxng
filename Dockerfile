@@ -1,3 +1,3 @@
-FROM searxng/searxng:latest
+FROM searxng/searxng:2026.10.17-1c10abe2d@sha256:8bdd9aa136b2dc3b9332cf24714fa34a375b8a1949a1201ec900c24d7378596e
 
 COPY settings.yml /etc/searxng/settings.yml

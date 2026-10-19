@@ -4,3 +4,13 @@ search:
   formats:
     - html
     - json
+
+# Give ordinary upstream responses time to finish. Provider suspensions and
+# Retry-After remain enabled; no proxies or automatic retries on blocks.
+outgoing:
+  request_timeout: 6.0
+  max_request_timeout: 10.0
+
+engines:
+  - name: duckduckgo
+    timeout: 6.0
