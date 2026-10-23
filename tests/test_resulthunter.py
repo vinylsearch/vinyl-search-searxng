@@ -51,14 +51,15 @@ class ResultHunterLinksTest(unittest.TestCase):
         ''')
         self.assertEqual(len(results), 0)
 
-    def test_only_result_hunter_enabled_for_general_search(self):
+    def test_only_result_hunter_enabled_for_general_web_search(self):
         settings, _ = load_settings()
         enabled = []
         for engine in settings['engines']:
             categories = engine.get('categories', [])
             if isinstance(categories, str):
                 categories = [c.strip() for c in categories.split(',')]
-            if ('general' in categories and not engine.get('disabled', False)
+            if ('general' in categories and 'web' in categories
+                    and not engine.get('disabled', False)
                     and not engine.get('inactive', False)):
                 enabled.append(engine['name'])
         self.assertEqual(enabled, ['resulthunter'])
