@@ -49,6 +49,30 @@ CERTIFICATES
 
 COPY settings.yml /etc/searxng/settings.yml
 
+# The pinned Result Hunter parser joins every anchor in a result card, which
+# produces invalid URLs when a card includes sitelinks. Select its headline.
+# Fail on upstream drift so a future image update must review this patch.
+RUN /usr/local/searxng/.venv/bin/python <<'RESULT_HUNTER_PATCH'
+from pathlib import Path
+
+path = Path("/usr/local/searxng/searx/engines/resulthunter.py")
+source = path.read_text()
+replacements = {
+    'url = extract_text(eval_xpath(result, ".//a/@href"))':
+        'url = extract_text(eval_xpath(result, "(.//a[.//h3]/@href)[1]"))',
+    'title=extract_text(eval_xpath(result, ".//a/h3")) or "",':
+        'title=extract_text(eval_xpath(result, "(.//a//h3)[1]")) or "",',
+}
+for old, new in replacements.items():
+    assert source.count(old) == 1, "Result Hunter parser changed; review patch"
+    source = source.replace(old, new)
+path.write_text(source)
+RESULT_HUNTER_PATCH
+
+# Exercise the actual installed engine and merged production configuration.
+COPY tests/test_resulthunter.py /tmp/test_resulthunter.py
+RUN /usr/local/searxng/.venv/bin/python /tmp/test_resulthunter.py && rm /tmp/test_resulthunter.py
+
 # Fail the build if the application's own HTTP client still accepts either
 # compromised test chain. DNS failures/timeouts are not treated as a pass.
 RUN /usr/local/searxng/.venv/bin/python <<'TLS_TEST'

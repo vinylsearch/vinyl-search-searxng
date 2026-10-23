@@ -11,13 +11,16 @@ outgoing:
   request_timeout: 6.0
   max_request_timeout: 10.0
 
-# Verified from this Render service on 19 October 2026:
-# Yep returns relevant album/product results. The previous default web engines
-# are currently rate-limited or time out. Keep them available for explicit
-# diagnostics, but do not include them in every production query.
+# Temporary free source verified with real album/shop searches from this
+# Render service on 23 October 2026. Yep currently denies server requests.
+# Keep unavailable engines disabled; retain normal provider backoff behavior.
 engines:
-  - name: yep
+  - name: resulthunter
     disabled: false
+    categories: [general, web]
+    timeout: 6.0
+  - name: yep
+    disabled: true
     categories: [general, web]
     timeout: 6.0
   - name: duckduckgo
