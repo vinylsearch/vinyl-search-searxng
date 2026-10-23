@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM searxng/searxng:2026.10.17-1c10abe2d@sha256:8bdd9aa136b2dc3b9332cf24714fa34a375b8a1949a1201ec900c24d7378596e
+FROM searxng/searxng@sha256:4d5f763fc369ec448be6e7ca1464275ee5d50851dbfd38edb29694bc87f027c2
 
 # Keep the existing SearXNG release; patch its bundled CA certificates.
 # The minimal upstream image has no OS package manager. Use its Python
