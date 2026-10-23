@@ -71,7 +71,7 @@ RESULT_HUNTER_PATCH
 
 # Exercise the actual installed engine and merged production configuration.
 COPY tests/test_resulthunter.py /tmp/test_resulthunter.py
-RUN /usr/local/searxng/.venv/bin/python /tmp/test_resulthunter.py && rm /tmp/test_resulthunter.py
+RUN PYTHONPATH=/usr/local/searxng /usr/local/searxng/.venv/bin/python /tmp/test_resulthunter.py && rm /tmp/test_resulthunter.py
 
 # Fail the build if the application's own HTTP client still accepts either
 # compromised test chain. DNS failures/timeouts are not treated as a pass.
