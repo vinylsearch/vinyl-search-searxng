@@ -47,7 +47,8 @@ assert actual == expected, "System trust store differs from patched certifi"
 print(f"CA verification passed: certifi 2026.10.19, {len(expected)} trusted roots")
 CERTIFICATES
 
-COPY settings.yml /etc/searxng/settings.yml
+# This service previously used the upstream image directly. Keep its default
+# settings and runtime environment instead of copying the main search config.
 
 # Fail the build if the application's own HTTP client still accepts either
 # compromised test chain. DNS failures/timeouts are not treated as a pass.
