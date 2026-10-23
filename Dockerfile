@@ -67,6 +67,10 @@ for old, new in replacements.items():
     assert source.count(old) == 1, "Result Hunter parser changed; review patch"
     source = source.replace(old, new)
 path.write_text(source)
+# The upstream image ships unchecked-hash bytecode, which otherwise keeps
+# executing the original parser even after its source file changes.
+for cached in (path.parent / "__pycache__").glob("resulthunter.*.pyc"):
+    cached.unlink()
 RESULT_HUNTER_PATCH
 
 # Exercise the actual installed engine and merged production configuration.
